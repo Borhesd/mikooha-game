@@ -2231,7 +2231,7 @@ MonoBehaviour:
     m_Bits: 64
   playerName: Cat
   rotationAngle: 20
-  rotationSpeed: 0.8
+  rotationSpeed: 0.5
 --- !u!50 &323833105
 Rigidbody2D:
   serializedVersion: 4
