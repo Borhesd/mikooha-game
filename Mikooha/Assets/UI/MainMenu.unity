@@ -322,7 +322,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: ca6ecb1c509df2f49ac9998006e16eaf, type: 3}
   m_PlayOnAwake: 1
-  m_Volume: 0.8
+  m_Volume: 0.4
   m_Pitch: 0.8
   Loop: 1
   Mute: 0
@@ -381,7 +381,7 @@ AudioSource:
     m_Curve:
     - serializedVersion: 3
       time: 0
-      value: 0
+      value: 0.275
       inSlope: 0
       outSlope: 0
       tangentMode: 0
@@ -413,6 +413,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 8051921780305289601, guid: ce28bb3087f7a3648930acf7be3723e1, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_StringArgument
+      value: Level-1
+      objectReference: {fileID: 0}
     - target: {fileID: 8051921781070128569, guid: ce28bb3087f7a3648930acf7be3723e1, type: 3}
       propertyPath: m_Name
       value: MainMenuUI
