@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Rendering.Universal;
 
 namespace ClearSky
 {
@@ -17,6 +18,17 @@ namespace ClearSky
         public float rotationAngle = 25f;
         public float rotationSpeed = 0.1f;
 
+        public AudioClip runClip;
+        public AudioClip jumpClip;
+        public AudioClip dieClip;
+
+        public float runPitch = 1f;
+        public float jumpPitch = 1f;
+        public float diePitch = 1f;
+
+        public GameObject shadow;
+
+        private AudioSource audioSource;
         private Rigidbody2D _rigidbody;
         private Animator anim;
         private int direction = 1;
@@ -31,6 +43,7 @@ namespace ClearSky
             _rigidbody = GetComponent<Rigidbody2D>();
             _rigidbody.simulated = true;
             anim = GetComponent<Animator>();
+            audioSource = GetComponent<AudioSource>();
         }
 
         private void FixedUpdate()
@@ -48,6 +61,7 @@ namespace ClearSky
                     Run();
                 }
 
+            Audio();
             RotateBody();
             Restart();
         }
@@ -69,6 +83,34 @@ namespace ClearSky
             anim.SetBool("isJump", false);
         }
 
+        public void Audio()
+        {
+            if (!anim.GetBool("isRun"))
+                if (audioSource.clip == runClip)
+                    audioSource.clip = null;
+        }
+
+        public void PlayJump()
+        {
+            audioSource.pitch = jumpPitch;
+            audioSource.PlayOneShot(jumpClip);
+        }
+        public void PlayRun()
+        {
+            if (!audioSource.isPlaying)
+            {
+                audioSource.pitch = runPitch;
+                audioSource.clip = runClip;
+                audioSource.loop = true;
+                audioSource.Play();
+            }
+        }
+        public void PlayDie()
+        {
+            audioSource.pitch = diePitch;
+            audioSource.PlayOneShot(dieClip);
+        }
+
         void Run()
         {
             Vector3 moveVelocity = Vector3.zero;
@@ -84,8 +126,12 @@ namespace ClearSky
                     transform.localScale = new Vector3(direction * scale, scale, scale);
                     _rigidbody.rotation *= direction;
                 }
+
                 if (!anim.GetBool("isJump"))
+                {
                     anim.SetBool("isRun", true);
+                    PlayRun();
+                }
 
                 moveVelocity = Vector3.left;
             }
@@ -102,13 +148,15 @@ namespace ClearSky
                 }
 
                 if (!anim.GetBool("isJump"))
+                {
                     anim.SetBool("isRun", true);
+                    PlayRun();
+                }
 
                 moveVelocity = Vector3.right;
             }
 
             transform.position += moveVelocity * movePower * Time.deltaTime;
-            
         }
         void Jump()
         {
@@ -126,6 +174,8 @@ namespace ClearSky
             _rigidbody.AddForce(jumpVelocity, ForceMode2D.Impulse);
 
             _rigidbody.rotation = rotationAngle * direction;
+
+            PlayJump();
 
             isJumping = false;
         }
@@ -150,6 +200,7 @@ namespace ClearSky
             anim.SetBool("isKickBoard", false);
             anim.SetTrigger("die");
             alive = false;
+            PlayDie();
         }
         void Restart()
         {
@@ -169,6 +220,11 @@ namespace ClearSky
         public void CheckSurface()
         {
             isSurface = Physics2D.OverlapBox(contactRadar.position, contactSize, 0f, surfaceLayer);
+
+            if (anim.GetBool("isJump") && isSurface)
+                PlayJump();
+
+            shadow.SetActive(isSurface);
             anim.SetBool("isJump", !isSurface);
         }
 

@@ -41,3 +41,9 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
+  - name: sky
+    uniqueID: 88811751
+    locked: 0
+  - name: ignore_shadow
+    uniqueID: 1876853483
+    locked: 0

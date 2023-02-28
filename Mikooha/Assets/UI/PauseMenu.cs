@@ -7,7 +7,8 @@ public class PauseMenu : MonoBehaviour
 {
     public MenuUI menuUI;
     public PlayerController player;
-
+    public Fade fade;
+    
     public bool Pause 
     {
         set => SetPauseState(value);
@@ -21,6 +22,7 @@ public class PauseMenu : MonoBehaviour
     {
         menuUI.gameObject.SetActive(false);
         pause = false;
+        Cursor.visible = false;
     }
 
     // Update is called once per frame
@@ -37,12 +39,16 @@ public class PauseMenu : MonoBehaviour
             menuUI.gameObject.SetActive(true);
             player.DisableMovement();
             pause = true;
+            Cursor.visible = true;
+            fade.In();
         }
         else
         {
             menuUI.gameObject.SetActive(false);
             player.EnableMovement();
             pause = false;
+            Cursor.visible = false;
+            fade.Out();
         }
     }
 }
